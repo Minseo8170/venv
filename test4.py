@@ -41,7 +41,11 @@ last_spawn_time = {
     "Dog2" : 0,
     "Dog3" : 0
 }
+last_spawn_time_all = 0
+last_spawn_time_enemy = 0
 SPAWN_COOLDOWN = 4000
+SPAWN_COOLDOWN_ALL = 3000
+
 
 # 생성 캐릭터 관리 리스트
 characters = []
@@ -94,9 +98,9 @@ class Dog1:
             self.animation_time = 0
 
     # 캐릭터 그리기
-    def draw(self, surface):
+    def draw(self, surface, x_offset):
         # 캐릭터를 중심 좌표에 맞게 보정
-        character_rect = self.images[self.frame_index].get_rect(center=(self.x, self.y))
+        character_rect = self.images[self.frame_index].get_rect(center=(self.x + x_offset, self.y))
         surface.blit(self.images[self.frame_index], character_rect.topleft)
 
 class Dog2:
@@ -137,9 +141,9 @@ class Dog2:
             self.animation_time = 0
 
     # 캐릭터 그리기
-    def draw(self, surface):
+    def draw(self, surface, x_offset):
         # 캐릭터를 중심 좌표에 맞게 보정
-        character_rect = self.images[self.frame_index].get_rect(center=(self.x, self.y))
+        character_rect = self.images[self.frame_index].get_rect(center=(self.x + x_offset, self.y))
         surface.blit(self.images[self.frame_index], character_rect.topleft)
 
 class Dog3:
@@ -180,9 +184,9 @@ class Dog3:
             self.animation_time = 0
 
     # 캐릭터 그리기
-    def draw(self, surface):
+    def draw(self, surface, x_offset):
         # 캐릭터를 중심 좌표에 맞게 보정
-        character_rect = self.images[self.frame_index].get_rect(center=(self.x, self.y))
+        character_rect = self.images[self.frame_index].get_rect(center=(self.x + x_offset, self.y))
         surface.blit(self.images[self.frame_index], character_rect.topleft)
 
 class enemy1:
@@ -225,9 +229,9 @@ class enemy1:
             self.animation_time = 0
 
     # 캐릭터 그리기
-    def draw(self, surface):
+    def draw(self, surface, x_offset):
         # 캐릭터를 중심 좌표에 맞게 보정
-        character_rect = self.images[self.frame_index].get_rect(center=(self.x, self.y))
+        character_rect = self.images[self.frame_index].get_rect(center=(self.x + x_offset, self.y))
         surface.blit(self.images[self.frame_index], character_rect.topleft)
 
 class enemy2:
@@ -270,9 +274,9 @@ class enemy2:
             self.animation_time = 0
 
     # 캐릭터 그리기
-    def draw(self, surface):
+    def draw(self, surface, x_offset):
         # 캐릭터를 중심 좌표에 맞게 보정
-        character_rect = self.images[self.frame_index].get_rect(center=(self.x, self.y))
+        character_rect = self.images[self.frame_index].get_rect(center=(self.x + x_offset, self.y))
         surface.blit(self.images[self.frame_index], character_rect.topleft)
         
 class Enemy3:
@@ -319,35 +323,41 @@ while True:
         elif keys[pygame.K_RIGHT]:
             selected_icon = (selected_icon + 1) % 3
         elif keys[pygame.K_a]:  # A 키를 누르면 캐릭터 생성
-            if selected_icon == 0 and current_time - last_spawn_time["Dog1"] > SPAWN_COOLDOWN:  # 첫 번째 아이콘에 해당하는 Dog1 생성
-                character_spawn_x = x_offset + 900
-                character_spawn_y = 100  # Y축 정중앙 (240x240 캐릭터 기준으로 보정) 
-                characters.append(Dog1(character_spawn_x, character_spawn_y))
-                last_spawn_time["Dog1"] = current_time
-            elif selected_icon == 1 and current_time - last_spawn_time["Dog2"] > SPAWN_COOLDOWN:  # 두 번째 아이콘에 해당하는 Dog2 생성
-                character_spawn_x = x_offset + 900
-                character_spawn_y = 100  # Y축 정중앙 (240x240 캐릭터 기준으로 보정) 
-                characters.append(Dog2(character_spawn_x, character_spawn_y))
-                last_spawn_time["Dog2"] = current_time
-            elif selected_icon == 2 and current_time - last_spawn_time["Dog3"] > SPAWN_COOLDOWN:  # 세 번째 아이콘에 해당하는 Dog3 생성
-                character_spawn_x = x_offset + 900
-                character_spawn_y = 100  # Y축 정중앙 (240x240 캐릭터 기준으로 보정) 
-                characters.append(Dog3(character_spawn_x, character_spawn_y))
-                last_spawn_time["Dog3"] = current_time
+            if current_time - last_spawn_time_all > SPAWN_COOLDOWN_ALL:
+                if selected_icon == 0 and current_time - last_spawn_time["Dog1"] > SPAWN_COOLDOWN:  # 첫 번째 아이콘에 해당하는 Dog1 생성
+                    character_spawn_x = 900
+                    character_spawn_y = 125  # Y축 정중앙 (240x240 캐릭터 기준으로 보정) 
+                    characters.append(Dog1(character_spawn_x, character_spawn_y))
+                    last_spawn_time["Dog1"] = current_time
+                elif selected_icon == 1 and current_time - last_spawn_time["Dog2"] > SPAWN_COOLDOWN:  # 두 번째 아이콘에 해당하는 Dog2 생성
+                    character_spawn_x = 900
+                    character_spawn_y = 125  # Y축 정중앙 (240x240 캐릭터 기준으로 보정) 
+                    characters.append(Dog2(character_spawn_x, character_spawn_y))
+                    last_spawn_time["Dog2"] = current_time
+                elif selected_icon == 2 and current_time - last_spawn_time["Dog3"] > SPAWN_COOLDOWN:  # 세 번째 아이콘에 해당하는 Dog3 생성
+                    character_spawn_x = 900
+                    character_spawn_y = 125  # Y축 정중앙 (240x240 캐릭터 기준으로 보정) 
+                    characters.append(Dog3(character_spawn_x, character_spawn_y))
+                    last_spawn_time["Dog3"] = current_time
+                last_spawn_time_all = current_time
 
     # 적 생성 로직
-    for enemy_type in ["Enemy1", "Enemy2"]:
-        if current_time - enemy_last_spawn_time[enemy_type] > enemy_spawn_intervals[enemy_type]:
-            spawn_x = x_offset + 50
-            spawn_y = 100
-            if enemy_type == "Enemy1":
-                characters.append(enemy1(spawn_x, spawn_y))
-            elif enemy_type == "Enemy2":
-                characters.append(enemy2(spawn_x, spawn_y))
+    enemy_types = ["Enemy1", "Enemy2"]
+    chosen_enemies = random.sample(enemy_types, 1)
+    for enemy_type in chosen_enemies:
+        if current_time - last_spawn_time_enemy > SPAWN_COOLDOWN_ALL:
+            if current_time - enemy_last_spawn_time[enemy_type] > enemy_spawn_intervals[enemy_type]:
+                spawn_x = 100
+                spawn_y = 125
+                if enemy_type == "Enemy1":
+                    characters.append(enemy1(spawn_x, spawn_y))
+                elif enemy_type == "Enemy2":
+                    characters.append(enemy2(spawn_x, spawn_y))
             
-            # 스폰 시간 및 다음 간격 갱신
-            enemy_last_spawn_time[enemy_type] = current_time
-            enemy_spawn_intervals[enemy_type] = random.randint(2000, 5000)
+                # 스폰 시간 및 다음 간격 갱신
+                enemy_last_spawn_time[enemy_type] = current_time
+                enemy_spawn_intervals[enemy_type] = random.randint(5000, 10000)
+            last_spawn_time_enemy = current_time
 
     # 배경 위치 조정
     x_offset = max(min(x_offset, 0), SCREEN_WIDTH - background_rect.width)
@@ -362,7 +372,7 @@ while True:
     # 캐릭터 업데이트 및 그리기
     for character in characters:
         character.update(dt)
-        character.draw(screen)
+        character.draw(screen, x_offset)
 
     # 캐릭터 아이콘 영역 그리기
     for i in range(3):
